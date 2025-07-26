@@ -1,10 +1,10 @@
 {
-	"name": "dk-dev-starter",
-	"description": "Dev Kommando developer starter template",
+	"name": "svelte-cabins",
+	"description": "From the Udemy project Ultimate React Course 2024: React, Next.js, Redux & More by Jonas Schmedtmann. Part 5: Section:33 Lecture:431 Project: [The Wild Oasis Website](https://github.com/XavierEnriquez/the-wild-oasis-website) built in Svelte Kit.",
 	"keywords": [],
 	"author": {
 		"name": "Xavier Enriquez",
-		"url": "https://devkommando.com/"
+		"url": "https://github.com/XavierEnriquez/"
 	},
 	"private": true,
 	"version": "0.0.1",
