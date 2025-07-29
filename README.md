@@ -55,6 +55,19 @@ Open-source reactive database for apps.
 To install Convex - pnpm i convex convex-svelte
 Set up Convex dev deployment - pnpx convex dev 
 
+In src/+layout.svelte
+<script lang="ts">
+	import '../app.css';
+	import { PUBLIC_CONVEX_URL } from '$env/static/public';
+	import { setupConvex } from 'convex-svelte';
+
+	const { children } = $props();
+	setupConvex(PUBLIC_CONVEX_URL);
+</script>
+
+{@render children()}
+
+
 ## Prettier
 Code formatting that assures consistency across all projects.
 > Check [Prettier](https://prettier.io/) documentation.
