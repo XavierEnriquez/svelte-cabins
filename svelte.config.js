@@ -6,7 +6,15 @@ const config = {
 	// Consult https://svelte.dev/docs/kit/integrations
 	// for more information about preprocessors
 	preprocess: vitePreprocess(),
-	kit: { adapter: adapter() }
+	kit: { 
+		adapter: adapter(),
+	alias: {
+			$routes: '/src/routes',
+			$convex: "./src/convex",
+			$lib: '/src/lib',
+			$components: '/src/lib/ui',
+		}
+	 }
 };
 
 export default config;
