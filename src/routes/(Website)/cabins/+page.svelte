@@ -1,3 +1,10 @@
+<script lang="ts">
+	import { useQuery } from 'convex-svelte';
+	import { api } from '$convex/_generated/api.js';
+
+	const query = useQuery(api.cabins.getCabins, {});
+</script>
+
 <main class="m-8">
 <h1 class="font-bold text-3xl mb-8">Explore Our Luxury Cabins</h1>
 <p class="text-primary-200 text-lg mb-10 max-w-3xl">
@@ -11,6 +18,17 @@
       <div>Filter Component</div>
       <div>
           <div>Cabins List Component</div>
+          {#if query.isLoading}
+  <p>Loading cabins...</p>
+{:else if query.error}
+  <p>Error loading cabins: {query.error.toString()}</p>
+{:else}
+  <ul>
+    {#each query.data as cabin}
+      <li>{cabin.name} - {cabin.description}</li>
+    {/each}
+  </ul>
+{/if}
           <div>Reservation Reminder Component</div>
       </div>
 </main>
