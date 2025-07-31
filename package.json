@@ -60,6 +60,7 @@
 		"better-auth": "^1.3.4",
 		"bits-ui": "^2.8.13",
 		"convex": "^1.25.4",
+		"convex-helpers": "^0.1.100",
 		"convex-svelte": "^0.0.11"
 	}
 }
