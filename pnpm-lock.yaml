@@ -17,6 +17,9 @@ importers:
       convex:
         specifier: ^1.25.4
         version: 1.25.4
+      convex-helpers:
+        specifier: ^0.1.100
+        version: 0.1.100(convex@1.25.4)(typescript@5.8.3)
       convex-svelte:
         specifier: ^0.0.11
         version: 0.0.11(convex@1.25.4)(svelte@5.36.16)
@@ -1077,6 +1080,28 @@ packages:
 
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
+
+  convex-helpers@0.1.100:
+    resolution: {integrity: sha512-In5VPKKlQdnv9WHpIKLXnLEKyHxaJYI0BXWTDJ27Ao6XUfpeiGPDGhOdqZ8y0DqTcQlDgmtSTmmttUv1fPWbdg==}
+    hasBin: true
+    peerDependencies:
+      '@standard-schema/spec': ^1.0.0
+      convex: ^1.13.0
+      hono: ^4.0.5
+      react: ^17.0.2 || ^18.0.0 || ^19.0.0
+      typescript: ^5.5
+      zod: ^3.22.4
+    peerDependenciesMeta:
+      '@standard-schema/spec':
+        optional: true
+      hono:
+        optional: true
+      react:
+        optional: true
+      typescript:
+        optional: true
+      zod:
+        optional: true
 
   convex-svelte@0.0.11:
     resolution: {integrity: sha512-N/29gg5Zqy72vKL4xHSLk3jGwXVKIWXPs6xzq6KxGL84y/D6hG85pG2CPOzn08EzMmByts5FTkJ5p3var6yDng==}
@@ -2911,6 +2936,12 @@ snapshots:
   color-name@1.1.4: {}
 
   concat-map@0.0.1: {}
+
+  convex-helpers@0.1.100(convex@1.25.4)(typescript@5.8.3):
+    dependencies:
+      convex: 1.25.4
+    optionalDependencies:
+      typescript: 5.8.3
 
   convex-svelte@0.0.11(convex@1.25.4)(svelte@5.36.16):
     dependencies:
