@@ -1,9 +1,12 @@
-
 export default {
-	providers: [
-		{
-			domain: process.env.CONVEX_SITE_URL!,
-			applicationID: 'convex'
-		}
-	]
-};
+  providers: [
+    {
+      // Your Convex site URL is provided in a system
+      // environment variable
+      domain: process.env.CONVEX_SITE_URL,
+
+      // Application ID has to be "convex" when using Convex as the database
+      applicationID: "convex",
+    },
+  ],
+}
