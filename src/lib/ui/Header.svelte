@@ -6,10 +6,10 @@
 	const routes = [
 		{ path: '/cabins', label: 'Cabins' },
 		{ path: '/about', label: 'About' },
-		{ path: '/admin', label: 'Admin' },
-		{ path: '/admin/dashboard', label: 'Admin Dashboard' },
-		{ path: '/app/account', label: 'App Account' },
-		{ path: '/app/dashboard', label: 'App Dashboard' }
+		{ path: '/app/account', label: 'Account' },
+		{ path: '/app/admin', label: 'Admin' },
+		{ path: '/app/dashboard', label: 'Dashboard' },
+		{ path: '/auth', label: 'Auth' },
 	]
 </script>
 
