@@ -9,7 +9,7 @@
 		{ path: '/app/account', label: 'Account' },
 		{ path: '/app/admin', label: 'Admin' },
 		{ path: '/app/dashboard', label: 'Dashboard' },
-		{ path: '/auth', label: 'Auth' },
+		{ path: '/auth/login', label: 'Login' },
 	]
 </script>
 
