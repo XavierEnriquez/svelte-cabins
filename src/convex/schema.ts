@@ -2,10 +2,17 @@
 // To regenerate the schema, run:
 // npx tsx generate-schema.ts
 
+// import { email } from "better-auth";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 const schema = defineSchema({
+  users: defineTable({
+    name: v.string(),
+    email: v.string(),
+    emailVerified: v.optional(v.union(v.null(), v.boolean())),
+    image: v.optional(v.union(v.null(), v.string())),
+  }),
   user: defineTable({
     name: v.string(),
     email: v.string(),
@@ -240,7 +247,43 @@ const schema = defineSchema({
     count: v.optional(v.union(v.null(), v.number())),
     lastRequest: v.optional(v.union(v.null(), v.number())),
   })
-    .index("key", ["key"]),
+  .index("key", ["key"]),
+
+
+  guests: defineTable({
+    guestID: v.string(),
+    fullName: v.string(),
+    email: v.string(),
+    typeID: v.string(),
+    nationality: v.string(),
+    countryFlag: v.optional(v.union(v.null(), v.string())),
+  }),
+
+  bookings: defineTable({
+    cabinId: v.number(),
+    guestId: v.number(),
+    hasBreakfast: v.boolean(),
+    isPaid: v.boolean(),
+    numGuest: v.number(),
+    observations: v.optional(v.union(v.null(), v.string())),
+    startDate: v.object({ daysFrom: v.number() }),
+    endDate: v.object({ daysFrom: v.number() }),
+    created_at: v.object({ daysFrom: v.number(), withTime: v.boolean() }),
+  })
+    .index("cabinId", ["cabinId"])
+    .index("guestId", ["guestId"]),
+
+  cabins: defineTable({
+    name: v.string(),
+    description: v.optional(v.union(v.null(), v.string())),
+    regularPrice: v.number(),
+    maxCapacity: v.number(),
+    discount: v.number(),
+    image: v.optional(v.union(v.null(), v.string())),
+  })
+    .index("name", ["name"])
+    .index("regularPrice", ["regularPrice"])
+    .index("maxCapacity", ["maxCapacity"]),
 
 });
 
