@@ -6,7 +6,7 @@ import {
 import { api, components, internal } from "./_generated/api";
 import { query } from "./_generated/server";
 import { DataModel, Id } from "./_generated/dataModel";
-import { asyncMap } from "convex-helpers";
+// import { asyncMap } from "convex-helpers";
 
 const authFunctions: AuthFunctions = internal.auth;
 const publicAuthFunctions: PublicAuthFunctions = api.auth;
@@ -28,6 +28,7 @@ export const {
     // Example: copy the user's email to the application users table.
     // We'll use onUpdateUser to keep it synced.
     const userId = await ctx.db.insert("users", {
+      name: user.name,
       email: user.email,
     });
 
@@ -36,19 +37,19 @@ export const {
   },
   onDeleteUser: async (ctx, userId) => {
     // Delete the user's data if the user is being deleted
-    const todos = await ctx.db
-      .query("todos")
-      .withIndex("userId", (q) => q.eq("userId", userId as Id<"users">))
-      .collect();
-    await asyncMap(todos, async (todo) => {
-      await ctx.db.delete(todo._id);
-    });
+    // const todos = await ctx.db
+    //   .query("todos")
+    //   .withIndex("userId", (q) => q.eq("userId", userId as Id<"users">))
+    //   .collect();
+    // await asyncMap(todos, async (todo) => {
+    //   await ctx.db.delete(todo._id);
+    // });
     await ctx.db.delete(userId as Id<"users">);
   },
   onUpdateUser: async (ctx, user) => {
-    // Keep the user's email synced
     const userId = user.userId as Id<"users">;
     await ctx.db.patch(userId, {
+      // Enter the user's db fields to be synced
       email: user.email,
     });
   },
