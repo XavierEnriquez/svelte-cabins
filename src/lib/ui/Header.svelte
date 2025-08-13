@@ -10,7 +10,7 @@
 		{ path: '/admin/dashboard', label: 'Admin Dashboard' },
 		{ path: '/account', label: 'Account' },
 		{ path: '/dashboard', label: 'App Dashboard' },
-		{ path: '/login', label: 'Login' }
+		{ path: '/auth/login', label: 'Login' }
 	]
 </script>
 
