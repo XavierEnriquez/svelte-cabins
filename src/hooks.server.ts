@@ -1,15 +1,21 @@
 import { svelteKitHandler } from "better-auth/svelte-kit";
 import { building } from '$app/environment'
-import { json } from '@sveltejs/kit';
-import { createAuth } from "./lib/auth";
+import { redirect } from '@sveltejs/kit';
+import { createAuth } from "$lib/auth";
+ import { sveltekitCookies } from "better-auth/svelte-kit";
+  import { getRequestEvent } from "$app/server";
 
-const auth = createAuth;
 
 export async function handle({ event, resolve }) {
+    const auth = createAuth();
+    sveltekitCookies(getRequestEvent);
 
     const fetchedSession = await auth.api.getSession({
-        headers: event.request.headers
-    })
+        query: {
+        disableCookieCache: true,
+    }, 
+    headers: event.request.headers
+})
 
     if (fetchedSession) {
         const {user, session} = fetchedSession;
@@ -22,8 +28,9 @@ export async function handle({ event, resolve }) {
     }
 
    if (event.url.pathname.startsWith('/(app)/') || event.route.id?.startsWith('/(app)/')) {
-       if (event.locals?.user) {
-           return json({ message:'Unauthorized'}, { status: 401 });
+       if (!event.locals?.user || !event.locals?.session) {
+        // const unauthorized = json({ message:'Unauthorized'}, { status: 401 });
+        throw redirect(302, '/auth/login');
        }
    }
 
