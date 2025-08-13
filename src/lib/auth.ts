@@ -1,25 +1,27 @@
+import { betterAuth, type BetterAuthOptions } from "better-auth";
 import { convexAdapter } from "@convex-dev/better-auth";
 import { convex } from "@convex-dev/better-auth/plugins";
 import { organization } from "better-auth/plugins";
+import { betterAuthComponent } from "../convex/auth";
+import { type GenericCtx } from "../convex/_generated/server";
 // import { genericOAuth, organization, twoFactor } from "better-auth/plugins";
 // import { emailOTP } from "better-auth/plugins";
 // import {
-//   sendMagicLink,
-//   sendOTPVerification,
-//   sendEmailVerification,
-//   sendResetPassword,
-// } from "../convex/email";
-// import { magicLink } from "better-auth/plugins";
-import { betterAuth, type BetterAuthOptions } from "better-auth";
-import { betterAuthComponent } from "../convex/auth";
-// import { requireMutationCtx } from "@convex-dev/better-auth/utils";
-import { type GenericCtx } from "../convex/_generated/server";
+  //   sendMagicLink,
+  //   sendOTPVerification,
+  //   sendEmailVerification,
+  //   sendResetPassword,
+  // } from "../convex/email";
+  // import { magicLink } from "better-auth/plugins";
+  // import { requireMutationCtx } from "@convex-dev/better-auth/utils";
+  // import { sveltekitCookies } from "better-auth/svelte-kit";
+  // import { getRequestEvent } from "$app/server";
 
-// Split out options so they can be passed to the convex plugin
-const createOptions = (ctx: GenericCtx) =>
-  ({
-    baseURL: "https://localhost:3000",
-    database: convexAdapter(ctx, betterAuthComponent),
+
+const createOptions = (dbAdapter: (ctx: GenericCtx) => ReturnType<typeof convexAdapter>) => {
+  return ({
+    baseURL: "https://localhost:5173",
+    database: dbAdapter,
     account: {
       accountLinking: {
         enabled: true,
@@ -34,32 +36,38 @@ const createOptions = (ctx: GenericCtx) =>
     //     });
     //   },
     // },
-    // emailAndPassword: {
-    //   enabled: true,
-    //   requireEmailVerification: true,
-    //   sendResetPassword: async ({ user, url }) => {
-    //     await sendResetPassword(requireMutationCtx(ctx), {
-    //       to: user.email,
-    //       url,
-    //     });
-    //   },
-    // },
+    emailAndPassword: {
+      enabled: true,
+      requireEmailVerification: false,
+      // sendResetPassword: async ({ user, url }) => {
+      //   await sendResetPassword(requireMutationCtx(ctx), {
+      //     to: user.email,
+      //     url,
+      //   });
+      // },
+    },
     socialProviders: {
-      github: {
-        clientId: process.env.GITHUB_CLIENT_ID as string,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-      },
-      google: {
-        clientId: process.env.GOOGLE_CLIENT_ID as string,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-        accessType: "offline",
-        prompt: "select_account+consent",
-      },
+      // github: {
+      //   clientId: process.env.GITHUB_CLIENT_ID as string,
+      //   clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+      // },
+      // google: {
+      //   clientId: process.env.GOOGLE_CLIENT_ID as string,
+      //   clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      //   accessType: "offline",
+      //   prompt: "select_account+consent",
+      // },
     },
     user: {
       deleteUser: {
         enabled: true,
       },
+    },
+    session: {
+        cookieCache: {
+            enabled: true,
+            maxAge: 5 * 60 // Cache duration in seconds
+        }
     },
     plugins: [
       // magicLink({
@@ -93,18 +101,33 @@ const createOptions = (ctx: GenericCtx) =>
       organization(),
     ],
   }) satisfies BetterAuthOptions;
+};
 
-export const createAuth = (ctx: GenericCtx) => {
-  const options = createOptions(ctx);
+export const createAuth = () => {
+  const dbAdapter = (ctx: GenericCtx) => convexAdapter(ctx, betterAuthComponent);
+  const options = createOptions(dbAdapter);
   return betterAuth({
     ...options,
     plugins: [
-      ...options.plugins,
       // Pass in options so plugin schema inference flows through. Only required
       // for plugins that customize the user or session schema.
       // See "Some caveats":
       // https://www.better-auth.com/docs/concepts/session-management#customizing-session-response
       convex({ options }),
+      ...options.plugins,
+      // sveltekitCookies(getRequestEvent)
     ],
   });
 };
+
+// const dbAdapter = (ctx: GenericCtx) => convexAdapter(ctx, betterAuthComponent);
+// const options = createOptions(dbAdapter);
+
+// export const auth = betterAuth({
+//     ...options,
+//   plugins: [
+    // Add your plugins here
+//     convex({ options }),
+//     sveltekitCookies(getRequestEvent)
+//   ]
+// });
