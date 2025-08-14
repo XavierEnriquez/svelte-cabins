@@ -53,6 +53,18 @@ export const {
       email: user.email,
     });
   },
+  onCreateSession: async (ctx, session) => {
+    // Create a session for the user
+    const sessionId = await ctx.db.insert("sessions", {
+      userId: session.userId,
+      sessionToken: session.token,
+      createdAt: session.createdAt,
+      expires: session.expiresAt,
+    });
+
+// Return the session ID
+return sessionId;
+  },
 });
 
 // Example function for getting the current user
@@ -74,6 +86,24 @@ export const getCurrentUser = query({
     };
   },
 });
+
+// export const getSessionAndUser = adapterQuery({
+// 	args: { sessionToken: v.string() },
+// 	handler: async (ctx, { sessionToken }) => {
+// 		const session = await ctx.db
+// 			.query('sessions')
+// 			.withIndex('sessionToken', (q) => q.eq('sessionToken', sessionToken))
+// 			.unique();
+// 		if (session === null) {
+// 			return null;
+// 		}
+// 		const user = await ctx.db.get(session.userId);
+// 		if (user === null) {
+// 			return null;
+// 		}
+// 		return { session, user };
+// 	}
+// });
 
 
 // import type{ Auth } from 'convex/server';
