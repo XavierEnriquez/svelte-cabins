@@ -56,6 +56,13 @@ const schema = defineSchema({
     .index("token", ["token"])
     .index("userId", ["userId"]),
 
+  sessions: defineTable({
+    userId: v.string(),
+    sessionToken: v.string(),
+    createdAt: v.number(),
+    expires: v.number(),
+  }),
+
   account: defineTable({
     accountId: v.string(),
     providerId: v.string(),
