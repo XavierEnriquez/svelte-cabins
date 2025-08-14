@@ -1,6 +1,6 @@
 <script lang="ts">
   import { authClient } from "$lib/auth-client";
-	import Header from "$lib/ui/Header.svelte";
+	import Header from "$lib/components/Header.svelte";
   const session = authClient.useSession();
 </script>
     
