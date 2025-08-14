@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { useQuery } from 'convex-svelte';
 	import { api } from '$convex/_generated/api.js';
-    import Header from '$lib/ui/Header.svelte';
+    import Header from '$lib/components/Header.svelte';
 
 	const query = useQuery(api.guests.getGuests, {});
 </script>
