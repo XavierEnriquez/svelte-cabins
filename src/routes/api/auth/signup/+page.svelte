@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
   
  const onSubmit = (e: Event) => {
     e.preventDefault(); // Prevent default form submission behavior
@@ -15,7 +15,7 @@
 
 <main class="m-8">
 <h1 class="font-bold text-3xl mb-8">Sign Up</h1>
-<p>Already have an account? <a href="/auth/login" class="text-blue-500">Log in</a></p>
+<p>Already have an account? <a href="/api/auth/login" class="text-blue-500">Log in</a></p>
 <form class="flex flex-col gap-4 w-96 mt-8" action="?/signup" method="post">
     <label  id="name" for="name">Name</label>
     <input autocomplete="name" class="border border-gray-300 p-2 rounded" type="text" name="name" placeholder="Name" required />
@@ -29,4 +29,84 @@
 </form>
 
 
-</main>
+</main> -->
+<script lang="ts">
+  import { authClient, useSession } from "$lib/auth-client";
+  import { enhance } from "$app/forms";
+
+const session = useSession();
+
+  let email = "";
+  let password = "";
+  
+  // Using reactive stores (recommended approach)
+  $: currentUser = $session.data?.user;
+  $: currentSession = $session.data?.session;
+  $: expiresAt = $session.data?.session?.expiresAt;
+
+  async function handleSignIn() {
+    const { data, error } = await authClient.signIn.email({
+      email,
+      password,
+    });
+    
+    if (error) {
+      console.error("Sign in failed:", error);
+    }
+  }
+  
+  async function handleSignUp() {
+    const { data, error } = await authClient.signUp.email({
+      fullName,
+      email,
+      password,
+    });
+    
+    if (error) {
+      console.error("Sign up failed:", error);
+    }
+  }
+  
+  async function handleSignOut() {
+    await authClient.signOut();
+  }
+  
+  async function handleGoogleSignIn() {
+    await authClient.signIn.social({
+      provider: "google",
+    });
+  }
+</script>
+
+{#if currentUser}
+  <div>
+    <h1>Welcome, {currentUser.name || currentUser.email}!</h1>
+    <p>Session expires: {new Date(expiresAt).toLocaleString()}</p>
+    <button on:click={handleSignOut}>Sign Out</button>
+  </div>
+{:else}
+  <div>
+    <h2>Sign In</h2>
+    <form on:submit|preventDefault={handleSignIn}>
+      <input bind:value={email} type="email" placeholder="Email" required />
+      <input bind:value={password} type="password" placeholder="Password" required />
+      <button type="submit">Sign In</button>
+    </form>
+    
+    <div class="divider">or</div>
+    
+    <button on:click={handleGoogleSignIn}>Sign in with Google</button>
+    
+    <div class="divider">Don't have an account?</div>
+    
+    <button on:click={handleSignUp}>Sign Up</button>
+  </div>
+{/if}
+
+<style>
+  .divider {
+    margin: 1rem 0;
+    text-align: center;
+    color: #666;
+  }
+</style>
