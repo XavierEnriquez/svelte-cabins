@@ -7,6 +7,25 @@ declare global {
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}
+		interface PageData {
+      session?: {
+        user: BetterAuthUser;
+        sessionId: string;
+        expiresAt: Date;
+        token: string;
+      } | null;
+      user?: BetterAuthUser | null;
+    }
+    
+    interface Locals {
+      session?: {
+        user: BetterAuthUser;
+        sessionId: string;
+        expiresAt: Date;
+        token: string;
+      } | null;
+      user?: BetterAuthUser | null;
+    }
 	}
 }
 
