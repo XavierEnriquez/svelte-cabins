@@ -36,13 +36,14 @@
 
 const session = useSession();
 
+  let name = "";
   let email = "";
   let password = "";
   
   // Using reactive stores (recommended approach)
-  $: currentUser = $session.data?.user;
-  $: currentSession = $session.data?.session;
-  $: expiresAt = $session.data?.session?.expiresAt;
+  $: currentUser = $session.data?.user || null;
+  // $: currentSession = $session.data?.session;
+  $: expiresAt = $session.data?.session?.expiresAt || null;
 
   async function handleSignIn() {
     const { data, error } = await authClient.signIn.email({
@@ -54,10 +55,11 @@ const session = useSession();
       console.error("Sign in failed:", error);
     }
   }
-  
-  async function handleSignUp() {
+
+  async function handleSignUp(e: Event) {
+    e.preventDefault(); // Prevent default form submission behavior
     const { data, error } = await authClient.signUp.email({
-      fullName,
+      name,
       email,
       password,
     });
@@ -77,31 +79,34 @@ const session = useSession();
     });
   }
 </script>
-
-{#if currentUser}
+<main class="m-8">
+  {#if currentUser}
   <div>
     <h1>Welcome, {currentUser.name || currentUser.email}!</h1>
-    <p>Session expires: {new Date(expiresAt).toLocaleString()}</p>
-    <button on:click={handleSignOut}>Sign Out</button>
+    <p>Session expires: {expiresAt?.toLocaleString()}</p>
+    <button onsubmit={handleSignOut}>Sign Out</button>
   </div>
-{:else}
+  {:else}
   <div>
-    <h2>Sign In</h2>
-    <form on:submit|preventDefault={handleSignIn}>
+    <h2>Sign up</h2>
+    <p>Already have an account? <a href="/api/auth/login" class="text-blue-500">Log in</a></p>
+    <form class="flex flex-col gap-4 w-96 mt-8" onsubmit={handleSignUp}>
+      <input bind:value={name} type="text" placeholder="Name" required />
       <input bind:value={email} type="email" placeholder="Email" required />
       <input bind:value={password} type="password" placeholder="Password" required />
-      <button type="submit">Sign In</button>
+      <button type="submit">Sign Up</button>
     </form>
     
     <div class="divider">or</div>
     
-    <button on:click={handleGoogleSignIn}>Sign in with Google</button>
+    <button onsubmit={handleGoogleSignIn}>Sign in with Google</button>
     
     <div class="divider">Don't have an account?</div>
     
-    <button on:click={handleSignUp}>Sign Up</button>
+    <button onsubmit={handleSignUp}>Sign Up</button>
   </div>
-{/if}
+  {/if}
+</main>
 
 <style>
   .divider {
