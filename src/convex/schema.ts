@@ -6,7 +6,7 @@ export default defineSchema({
   users: defineTable({
     email: v.string(),
     emailVerified: v.optional(v.boolean()),
-    fullName: v.optional(v.string()),
+    name: v.optional(v.string()),
     image: v.optional(v.string()),
   }).index("by_email", ["email"]),
 
@@ -62,7 +62,7 @@ export default defineSchema({
     .index("guestId", ["guestId"]),
 
   cabins: defineTable({
-    cabinName: v.string(),
+    name: v.string(),
     description: v.optional(v.union(v.null(), v.string())),
     regularPrice: v.number(),
     maxCapacity: v.number(),
