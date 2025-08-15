@@ -53,16 +53,16 @@ const createOptions = () => {
     // },
    
     socialProviders: {
-      github: {
-        clientId: process.env.GITHUB_CLIENT_ID as string,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-      },
-      google: {
-        clientId: process.env.GOOGLE_CLIENT_ID as string,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-        accessType: "offline",
-        prompt: "select_account+consent",
-      },
+      // github: {
+      //   clientId: process.env.GITHUB_CLIENT_ID as string,
+      //   clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+      // },
+      // google: {
+      //   clientId: process.env.GOOGLE_CLIENT_ID as string,
+      //   clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      //   accessType: "offline",
+      //   prompt: "select_account+consent",
+      // },
     },
     user: {
       deleteUser: {
@@ -109,13 +109,15 @@ const createOptions = () => {
   }) satisfies BetterAuthOptions;
 };
 
+const dbadapter = (ctx: GenericCtx) => convexAdapter(ctx, betterAuthComponent);
+
 // Create the auth instance
-export const createAuth = (ctx: GenericCtx) =>{
+export const createAuth = () =>{
 const options = createOptions();
   // Configure your Better Auth instance here
   return betterAuth({
     ...options,
-    database: convexAdapter(ctx, betterAuthComponent),
+    database: dbadapter,
     plugins: [
       // The Convex plugin is required
       convex(),
@@ -124,26 +126,7 @@ const options = createOptions();
 }
   ;
 
-// Example function for getting the current user
-export const getCurrentUser = query({
-  args: {},
-  handler: async (ctx) => {
-    // Get user data from Better Auth - email, name, image, etc.
-    const userMetadata = await betterAuthComponent.getAuthUser(ctx);
-    if (!userMetadata) {
-      return null;
-    }
 
-    // Get user data from your application's database
-    // (skip this if you have no fields in your users table schema)
-    const user = await ctx.db.get(userMetadata.userId as Id<"users">);
-    
-    return {
-      ...user,
-      ...userMetadata,
-    };
-  },
-});
 
 // Required auth functions for user lifecycle
 export const { createUser, deleteUser, updateUser, createSession, isAuthenticated } =
@@ -174,3 +157,24 @@ export const { createUser, deleteUser, updateUser, createSession, isAuthenticate
       // Optionally delete any related data
     },
   });
+
+  // Example function for getting the current user
+export const getCurrentUser = query({
+  args: {},
+  handler: async (ctx) => {
+    // Get user data from Better Auth - email, name, image, etc.
+    const userMetadata = await betterAuthComponent.getAuthUser(ctx);
+    if (!userMetadata) {
+      return null;
+    }
+
+    // Get user data from your application's database
+    // (skip this if you have no fields in your users table schema)
+    const user = await ctx.db.get(userMetadata.userId as Id<"users">);
+    
+    return {
+      ...user,
+      ...userMetadata,
+    };
+  },
+});
