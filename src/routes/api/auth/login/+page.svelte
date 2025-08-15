@@ -16,7 +16,7 @@ const onSubmit = (e: Event) => {
 
 <main class="m-8">
 <h1 class="font-bold text-3xl mb-8">Login</h1>
-<p>Don't have an account? <a href="/auth/signup" class="text-blue-500">Sign up</a></p>
+<p>Don't have an account? <a href="/api/auth/signup" class="text-blue-500">Sign up</a></p>
 <form class="flex flex-col gap-4 w-96 mt-8" action="/auth/login" method="post">
   <label id="email" for="email">Email</label>
   <input autocomplete="email" class="border border-gray-300 p-2 rounded" type="email" name="email" placeholder="email@youremail.com" required />
