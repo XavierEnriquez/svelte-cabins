@@ -1,20 +1,16 @@
 // hooks.server.ts
 import type { Handle } from "@sveltejs/kit";
-import { sveltekitCookies } from "better-auth/svelte-kit";
-import { getRequestEvent } from "$app/server";
 import { redirect } from '@sveltejs/kit';
-import { createAuth } from "$convex/auth";
-import {  svelteKitHandler } from "better-auth/svelte-kit";
+import { auth } from "$lib/auth";
+import { svelteKitHandler } from "better-auth/svelte-kit";
 import { building } from "$app/environment";
 
-const auth = createAuth();
+import { sveltekitCookies } from "better-auth/svelte-kit";
+import { getRequestEvent } from "$app/server";
+
+sveltekitCookies(getRequestEvent);
 
 export const handle: Handle = async ({ event, resolve }) => {
-  // With the official Convex integration, authentication is handled
-  // entirely through Convex, so no special server handling is needed
-
-  sveltekitCookies(getRequestEvent);
-
   const fetchedSession = await auth.api.getSession(
     {
       headers: event.request.headers,
@@ -41,7 +37,7 @@ const user = fetchedSession?.user;
 
   if (event.url.pathname.startsWith('/(app)/') || event.route.id?.startsWith('/(app)/')) {
        if (!event.locals?.user || !event.locals?.session) {
-        throw redirect(302, '/api/auth/login');
+        throw redirect(302, '/auth/login');
        }
    }
 
