@@ -48,7 +48,7 @@
   </div>
   {:else}
   <div>
-    <h1 class="font-bold text-3xl mb-8">Sign up</h1>
+    <h1 class="font-bold text-3xl mb-8">Sign in</h1>
     <p>Don't have an account? <a href="/auth/sign-up" class="text-blue-500">Sign up</a></p>
 
     <form class="flex flex-col gap-2 w-96 mt-8" on:submit={handleSubmit}>
@@ -77,7 +77,7 @@
       />
       
       <button class="bg-blue-500 text-white p-2 rounded" type="submit">
-        Sign Up
+        Sign in
       </button>
     </form>
 
@@ -87,7 +87,7 @@
       class="bg-blue-500 text-white p-2 rounded w-full" 
       on:click={handleGoogleSignIn}
     >
-      Sign up with Google
+      Sign in with Google
     </button>
   </div>
   {/if}
